@@ -21,7 +21,7 @@ jobs:
             
   build_sif:
     docker:
-      - image: singularityware/singularity:3.2.1-slim
+      - image: singularityware/singulmarity:3.2.1-slim
     steps:
       - checkout
       - attach_workspace:
@@ -129,7 +129,7 @@ jobs:
           name: Pushing build to docker hub
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            if [ "$CIRCLE_BRANCH" = "master" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
+            if [ "$CIRCLE_BRANCH" = "main" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
             export DOCKER_NAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$MY_TAG
             # tag and push here:
             echo docker push $DOCKER_NAME
