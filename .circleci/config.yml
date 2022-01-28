@@ -10,7 +10,7 @@ jobs:
           name: Building Docker container
           no_output_timeout: 1h
           command: |
-              if [ "$CIRCLE_BRANCH" = "master" -o "$CIRCLE_BRANCH" = "" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
+              if [ "$CIRCLE_BRANCH" = "main" -o "$CIRCLE_BRANCH" = "" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
               export DOCKER_NAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$MY_TAG
               docker build -t $DOCKER_NAME .
               docker save $DOCKER_NAME -o /tmp/docker_image.tar
@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Running Tests
           command: |
-              if [ "$CIRCLE_BRANCH" = "master" -o "$CIRCLE_BRANCH" = "" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
+              if [ "$CIRCLE_BRANCH" = "main" -o "$CIRCLE_BRANCH" = "" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
               export DOCKER_NAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$MY_TAG
               # put tests here
               echo "no tests implemented yet"
@@ -91,7 +91,7 @@ jobs:
           no_output_timeout: 1h
           command: |
             ssh-keyscan $CC_HOST >> ~/.ssh/known_hosts
-            if [ "$CIRCLE_BRANCH" = "master" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
+            if [ "$CIRCLE_BRANCH" = "main" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
             scp /tmp/workspace/singularity_image.sif ${CC_USER}@${CC_HOST}:${CC_PATH}/${CIRCLE_PROJECT_USERNAME}_${CIRCLE_PROJECT_REPONAME}_${MY_TAG}.sif
            
   deploy_dev_sif:
@@ -110,7 +110,7 @@ jobs:
       - run:
           name: Pushing build to sylabs cloud
           command: |
-            if [ "$CIRCLE_BRANCH" = "master" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
+            if [ "$CIRCLE_BRANCH" = "main" ]; then MY_TAG=latest; else MY_TAG=$CIRCLE_BRANCH; fi
             singularity push --allow-unsigned /tmp/workspace/singularity_image.sif library://${SYLABS_USER}/circleci/${CIRCLE_PROJECT_REPONAME}:$MY_TAG
 
   deploy_dev:
